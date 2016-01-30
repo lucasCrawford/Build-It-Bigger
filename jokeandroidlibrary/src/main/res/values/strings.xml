@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Jokester</string>
+
+    <string name="jokes_title">Random Joke</string>
+</resources>

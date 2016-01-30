@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Jokester (Lite)</string>
+
+    <string name="network_unavailable">Network is currently unavailable!</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="main_joke_fragment">Get a random joke!</string>
+    <string name="get_joke_btn_msg">Go</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+</resources>

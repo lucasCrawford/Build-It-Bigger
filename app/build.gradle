@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "org.thorrism.gcmdemo"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        free {
+            applicationId = "org.thorrism.gcmdemo.free"
+        }
+        paid {
+            applicationId = "org.thorrism.gcmdemo.paid"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //Dependencies for test
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:1.9.5"
+
+    //Dependencies for free version
+    freeCompile 'com.google.android.gms:play-services-ads:8.4.0'
+
+    //Dependencies for all product flavors
+    compile project(path: ':backend', configuration: 'android-endpoints')
+    compile project(':jokeandroidlibrary')
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
+    compile 'org.apache.commons:commons-lang3:3.0'
+}
