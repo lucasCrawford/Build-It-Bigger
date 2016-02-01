@@ -11,6 +11,7 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
+import org.thorrism.gcmdemo.BuildConfig;
 import org.thorrism.gcmdemo.R;
 import org.thorrism.gcmdemo.utils.Constants;
 
@@ -39,24 +40,30 @@ public class FetchJokeTask extends AsyncTask<Boolean, Void, String> {
     @Override
     protected String doInBackground(Boolean... params) {
         Boolean localService = params[0];
+        MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
+                new AndroidJsonFactory(), null);
 
-        MyApi.Builder builder;
+        /* If the task is for a local service end point */
+        if(localService) {
+            builder.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                @Override
+                public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                    abstractGoogleClientRequest.setDisableGZipContent(true);
+                }
+            });
 
-        if(mApiService == null) {
-            builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-                    new AndroidJsonFactory(), null)
-                    // options for running against local devappserver
-                    // - 10.0.2.2 is localhost's IP address in Android emulator
-                    // - turn off compression when running against local devappserver
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                        @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true);
-                        }
-                    });
-            mApiService = builder.build();
+            /* Check if we are running this local service on an emulator */
+            if(BuildConfig.DEBUG_EMULATOR){
+                builder.setRootUrl(Constants.LOCAL_URL);
+            }
+
+        }else{
+            builder.setRootUrl(Constants.ENDPOINT_URL);
+
         }
+        mApiService = builder
+                .setApplicationName(Constants.APP_NAME).
+                build();
 
         /* Get the joke from the api service. */
         try {

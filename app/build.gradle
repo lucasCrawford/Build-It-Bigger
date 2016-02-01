@@ -20,6 +20,10 @@ android {
         }
     }
 
+    buildTypes.each {
+        it.buildConfigField 'boolean', 'DEBUG_EMULATOR', 'false'
+    }
+
     productFlavors {
         free {
             applicationId = "org.thorrism.gcmdemo.free"
